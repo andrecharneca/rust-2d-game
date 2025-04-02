@@ -31,8 +31,7 @@ impl Screen {
     pub fn update_grid(&mut self, objects: &Vec<Object>) {
         self.reset_grid();
         for obj in objects {
-            let abs_pos = pos_rel_to_abs(obj.pos, self.height, self.width);
-            self.grid[abs_pos.1][abs_pos.0] = obj.sprite.clone();
+            self.grid[obj.pos.1 as usize][obj.pos.0 as usize] = obj.sprite.clone();
         }
     }
 

@@ -2,9 +2,9 @@
 use device_query::Keycode;
 
 //Rendering
-pub const TARGET_FPS: i32 = 60;
-pub const WINDOW_WIDTH: usize = 40;
-pub const WINDOW_HEIGHT: usize = 20;
+pub const TARGET_FPS: u64 = 60;
+pub const WINDOW_WIDTH: u64 = 40;
+pub const WINDOW_HEIGHT: u64 = 20;
 
 // Controls
 #[derive(Debug)]
@@ -27,4 +27,4 @@ impl Controls {
 
 // Player
 pub const PLAYER_CONTROLS: Controls = Controls::new();
-pub const PLAYER_SPEED: f32 = 0.02;
+pub const PLAYER_SPEED: i32 = 1;
