@@ -1,0 +1,8 @@
+[package]
+name = "game_test"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+device_query = "3.0.1"
+rand = "0.8"
