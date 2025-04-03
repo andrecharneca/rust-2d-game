@@ -50,6 +50,7 @@ impl Player {
             controls: PLAYER_CONTROLS
         }
     }
+    
     pub fn apply_input(&mut self, input: Keycode) {
         // assuming input only moves
         let delta = match input {
@@ -61,14 +62,17 @@ impl Player {
         };
         self.move_pos(delta);
     }
-    pub fn test_update(&mut self) {
+    
+    /// Updates player position based on input
+    pub fn update(&mut self) {
         let device_state = DeviceState::new();
+    
         let keys = device_state.get_keys();
         let mut delta = (0, 0);
 
         if keys.contains(&self.controls.right) {
             delta.0 += PLAYER_SPEED
-        } 
+        }
         if keys.contains(&self.controls.left) {
             delta.0 -= PLAYER_SPEED
         }
@@ -95,6 +99,10 @@ impl Enemy {
             object: Object::new(sprite, pos),
        }
     }
+
+    /// Update position with specific movement pattern
+    pub fn update(&mut self) {}
+
 }
 
 impl Movable for Enemy {

@@ -51,7 +51,7 @@ pub fn run_game() {
         // } else {
         //     println!("No input...")
         // }
-        player.test_update();
+        player.update();
         enemy.move_pos((
             rand::thread_rng().gen_range(-5..5) as i32,
             rand::thread_rng().gen_range(-5..5) as i32,
