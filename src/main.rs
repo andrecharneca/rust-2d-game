@@ -2,9 +2,10 @@ use std::{thread::sleep, time::Duration};
 
 mod game;
 mod screen;
-mod object;
+mod entity;
 mod utils;
 mod constants;
+mod components;
 
 fn main() {
     game::run_game();

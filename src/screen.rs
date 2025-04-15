@@ -1,7 +1,6 @@
 // Screen implementation
-
 use crate::utils::{pos_rel_to_abs, clear_screen};
-use crate::object::Object;
+use crate::entity::{self, Entity};
 
 pub struct Screen {
     width: usize,
@@ -28,10 +27,11 @@ impl Screen {
     }
 
     // Update the grid with objects
-    pub fn update_grid(&mut self, objects: &Vec<Object>) {
+    pub fn update_grid(&mut self, entities: Vec<Entity>) {
         self.reset_grid();
-        for obj in objects {
-            self.grid[obj.pos.1 as usize][obj.pos.0 as usize] = obj.sprite.clone();
+        for entity in entities {
+            let position = entity.get_pos();
+            self.grid[position.1 as usize][position.0 as usize] = entity.get_sprite();
         }
     }
 

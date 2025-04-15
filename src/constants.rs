@@ -2,12 +2,12 @@
 use device_query::Keycode;
 
 //Rendering
-pub const TARGET_FPS: u64 = 60;
+pub const TARGET_FPS: u64 = 30;
 pub const WINDOW_WIDTH: u64 = 40;
 pub const WINDOW_HEIGHT: u64 = 20;
 
 // Controls
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Controls {
     pub up: Keycode,
     pub down: Keycode,
