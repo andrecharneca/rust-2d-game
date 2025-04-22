@@ -1,11 +1,10 @@
 use std::{thread::sleep, time::Duration};
 
 mod game;
-mod screen;
-mod entity;
-mod utils;
-mod constants;
+mod systems;
 mod components;
+mod utils;
+mod entities;
 
 fn main() {
     game::run_game();

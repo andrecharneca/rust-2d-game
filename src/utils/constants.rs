@@ -2,7 +2,7 @@
 use device_query::Keycode;
 
 //Rendering
-pub const TARGET_FPS: u64 = 30;
+pub const TARGET_FPS: u64 = 1;
 pub const WINDOW_WIDTH: u64 = 40;
 pub const WINDOW_HEIGHT: u64 = 20;
 

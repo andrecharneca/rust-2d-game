@@ -1,6 +1,9 @@
 // Game engine structs
-use crate::constants::{Controls, PLAYER_CONTROLS, PLAYER_SPEED, WINDOW_HEIGHT, WINDOW_WIDTH};
-use crate::components::{Position, Velocity, Sprite};
+use crate::utils::{
+    constants::*,
+    utils::*
+};
+use crate::components::components::*;
 use device_query::{Keycode, DeviceState, DeviceQuery};
 use rand::Rng;
 
@@ -89,30 +92,29 @@ impl Enemy {
     pub fn new(sprite_str: String, x: i32, y: i32) -> Self {
         Self {
             pos: Position::new(x, y),
-            vel: Velocity::new(0.0, 0.0),
+            vel: Velocity::new(0, 0),
             sprite: Sprite::new(sprite_str),
         }
     }
 
-    /// Update position with specific movement pattern
-    pub fn update(&mut self) {
-        // let delta = match self.pos.x >= (WINDOW_WIDTH-1) as i32 {
-        //     true => (-1, 0),
-        //     false => (1, 0)
-        // };
-        if self.pos.x >= (WINDOW_WIDTH-1) as i32 {
-            self.pos.x = (WINDOW_WIDTH-1) as i32 / 2;
-            self.vel.zero();
-        }
-        if self.pos.y >= (WINDOW_HEIGHT-1) as i32 {
-            self.pos.y = (WINDOW_HEIGHT-1) as i32 / 2;
-            self.vel.zero();
-        }
-        let delta_v = (
-            rand::thread_rng().gen_range(-0.1..0.2),
-            rand::thread_rng().gen_range(-0.1..0.2)
-            );
-        self.vel.add(delta_v);
-        self.pos.add((self.vel.x as i32, self.vel.y as i32));
-    }
+    // pub fn update(&mut self) {
+    //     // let delta = match self.pos.x >= (WINDOW_WIDTH-1) as i32 {
+    //     //     true => (-1, 0),
+    //     //     false => (1, 0)
+    //     // };
+    //     if self.pos.x >= (WINDOW_WIDTH-1) as i32 {
+    //         self.pos.x = (WINDOW_WIDTH-1) as i32 / 2;
+    //         self.vel.zero();
+    //     }
+    //     if self.pos.y >= (WINDOW_HEIGHT-1) as i32 {
+    //         self.pos.y = (WINDOW_HEIGHT-1) as i32 / 2;
+    //         self.vel.zero();
+    //     }
+    //     let delta_v = (
+    //         rand::thread_rng().gen_range(-0.1..0.2),
+    //         rand::thread_rng().gen_range(-0.1..0.2)
+    //         );
+    //     self.vel.add(delta_v);
+    //     self.pos.add((self.vel.x as i32, self.vel.y as i32));
+    // }
 }

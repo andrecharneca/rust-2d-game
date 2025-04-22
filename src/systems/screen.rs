@@ -1,6 +1,9 @@
 // Screen implementation
-use crate::utils::{pos_rel_to_abs, clear_screen};
-use crate::entity::{self, Entity};
+use crate::utils::{
+    constants::*,
+    utils::*
+};
+use crate::entities::entities::*;
 
 pub struct Screen {
     width: usize,
