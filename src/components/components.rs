@@ -13,7 +13,7 @@ use std::{
 ///
 pub trait AnyComponent {
     fn into_box(self) -> Box<dyn AnyComponent>;
-    fn insert_into_entity(self: Box<Self>, world: &mut World, entity: usize);
+    fn insert_into_entity(self: Box<Self>, world: &mut World, entity: &usize);
 }
 
 impl<T: 'static + Debug + Clone> AnyComponent for T {
@@ -21,7 +21,7 @@ impl<T: 'static + Debug + Clone> AnyComponent for T {
         Box::new(self)
     }
 
-    fn insert_into_entity(self: Box<Self>, world: &mut World, entity: usize) {
+    fn insert_into_entity(self: Box<Self>, world: &mut World, entity: &usize) {
         world.add_component_to_entity(entity, *self);
     }
 }
@@ -30,7 +30,7 @@ trait ComponentVec {
     fn as_any_mut(&mut self) -> &mut dyn std::any::Any;
     fn push_none(&mut self);
     fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult;
-    fn fmt_entity(&self, entity: usize, f: &mut dyn Write) -> FmtResult;
+    fn fmt_entity(&self, entity: &usize, f: &mut dyn Write) -> FmtResult;
 }
 
 impl Debug for dyn ComponentVec {
@@ -58,8 +58,8 @@ impl<T: 'static + Debug> ComponentVec for RefCell<Vec<Option<T>>> {
     }
 
     /// For formatting an entity
-    fn fmt_entity(&self, entity: usize, f: &mut dyn std::fmt::Write) -> std::fmt::Result {
-        if let Some(Some(comp)) = self.borrow().get(entity) {
+    fn fmt_entity(&self, entity: &usize, f: &mut dyn std::fmt::Write) -> std::fmt::Result {
+        if let Some(Some(comp)) = self.borrow().get(*entity) {
             write!(f, "{:?}", comp)
         } else {
             Ok(())
@@ -84,13 +84,13 @@ impl World {
 
     /// Add component of ComponentType (e.g. Health, Position, etc.) to entity
     /// In case a ComponentVec for that ComponentType doesn't exist yet, create it.
-    pub fn add_component_to_entity<ComponentType: 'static + Debug>(&mut self, entity: usize, component: ComponentType) {
+    pub fn add_component_to_entity<ComponentType: 'static + Debug>(&mut self, entity: &usize, component: ComponentType) {
         // find the correct component vec by trying to downcast each to ComponentType
         for component_vec in self.component_vecs.iter_mut() {
             if let Some(component_vec) = component_vec
             .as_any_mut()
             .downcast_mut::<RefCell<Vec<Option<ComponentType>>>>() {
-                component_vec.get_mut()[entity] = Some(component);
+                component_vec.get_mut()[*entity] = Some(component);
                 return;
             }
         }
@@ -100,7 +100,7 @@ impl World {
         for _ in 0..self.entities_count {
             new_component_vec.push(None);
         }
-        new_component_vec[entity] = Some(component);
+        new_component_vec[*entity] = Some(component);
         self.component_vecs.push(Box::new(RefCell::new(new_component_vec)));
     }
 
@@ -114,7 +114,7 @@ impl World {
 
         // fill with specified components
         for component in components {
-            component.insert_into_entity(self, entity_id);
+            component.insert_into_entity(self, &entity_id);
         }
         entity_id
     }
@@ -147,7 +147,7 @@ impl World {
         let mut first = true;
         for comp_vec in self.component_vecs.iter() {
             let mut output = String::new();
-            let _ = comp_vec.fmt_entity(*entity, &mut output);
+            let _ = comp_vec.fmt_entity(entity, &mut output);
 
             if !output.is_empty() {
                 if !first {
@@ -172,38 +172,18 @@ pub struct Position {
     pub y: i32
 }
 
-impl Position {
-    pub fn new (x: i32, y: i32) -> Self {
-        Self { x, y }
-    }
-    pub fn add(&mut self, delta: (i32, i32)) {
-        self.x = (self.x + delta.0).clamp(0,(WINDOW_WIDTH - 1) as i32);
-        self.y = (self.y + delta.1).clamp(0,(WINDOW_HEIGHT - 1) as i32);
-    }
-}
-
 #[derive(Debug, Clone)]
 pub struct Velocity {
     pub x: i32,
     pub y: i32
 }
 
-impl Velocity {
 
-    pub fn new(x: i32, y: i32) -> Self {
-        Self { x, y }
-    }
-    pub fn add(&mut self, delta: (i32, i32)) {
-        // TODO: temp, the clamping should be handled by a CollisionHandler
-        self.x += delta.0;
-        self.y += delta.1;
-    }
-    pub fn zero(&mut self) {
-        self.x = 0;
-        self.y = 0;
-    }
-}
+#[derive(Debug, Clone)]
+pub struct PlayerTag;
 
+#[derive(Debug, Clone)]
+pub struct EnemyTag;
 
 #[derive(Debug, Clone)]
 pub struct Sprite {

@@ -5,13 +5,17 @@ use device_query::{DeviceQuery, DeviceState, Keycode};
 pub fn clear_screen(){
     std::process::Command::new("clear").status().unwrap();
 }
-pub fn read_input() -> Keycode {
+pub fn read_input() -> Option<Keycode> {
     let device_state = DeviceState::new();
-    let mut keys: Vec<Keycode> = Vec::new();
-    while keys.len() == 0 {
-        keys = device_state.get_keys();
+    // while keys.len() == 0 {
+    //     keys = device_state.get_keys();
+    // }
+    let keys = device_state.get_keys();
+    if keys.len() != 0 {
+        Some(keys[0])
+    } else {
+        None
     }
-    keys[0]
 }
 
 pub fn pos_rel_to_abs(pos: (f32, f32), height: usize, width: usize) -> (usize, usize) {
